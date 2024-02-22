@@ -16,10 +16,6 @@ let board;
 let turn = 'X';
 let win;
 
-win = board[0] && board[0] === board[1] && board[0] === board[2] ? board[0] : null;
-
-//win = board[0] && board[0] === board[1] && board[0] === board[2] ? board[0] : null;
-
 /*----- cached element references -----*/
 
 const squares = Array.from(document.querySelectorAll('#board div'));
@@ -29,6 +25,8 @@ const messages = document.querySelector('h2');
 /*----- event listeners -----*/
 
 document.getElementById('board').addEventListener('click', handleTurn);
+
+document.getElementById('reset-button').addEventListener('click', init);
 
 /*----- functions -----*/
 
@@ -57,6 +55,7 @@ function render() {
         });
 
         messages.textContent = `It's ${turn}'s turn!`;
+        messages.textContent = win === 'T' ? `That's a tie, queen!` : win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
 
     }
 
@@ -80,14 +79,15 @@ function handleTurn(event) {
 function getWinner() {
     
     let winner = null;
-    winningCombos.forEach(function(combo, index) {
-
-        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) winner = board[combo[0]];
-   
+    winningCombos.forEach((combo, index) => {
+        if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) {
+        winner = board[combo[0]];
+        }
+    
     });
     
-    return winner;
-    
+    return winner ? winner : board.includes('') ? null : 'T';
+        
 }
 
-messages.textContent = win ? `${win} wins the game!` : `It's ${turn}'s turn!`;
+win = board[0] && board[0] === board[1] && board[0] === board[2] ? board[0] : null;
